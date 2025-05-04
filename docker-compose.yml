@@ -1,0 +1,85 @@
+services:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro
+    restart: unless-stopped
+    networks:
+      - grafana-network
+
+  node-exporter:
+    image: prom/node-exporter:v1.9.1
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+    networks:
+      - grafana-network
+
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    networks:
+      - grafana-network
+
+  grafana:
+    image: grafana/grafana:11.6.1
+    restart: unless-stopped
+    networks:
+      - proxy
+      - grafana-network
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - 3000:3000
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.docker.network=proxy"
+    #   - "traefik.http.routers.grafana.rule=Host(`grafana.mondomaine.com`)"
+    #   - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    #   - "traefik.http.routers.grafana.tls=true"
+    #   - "traefik.http.routers.grafana.entrypoints=websecure"
+    #   - "traefik.http.routers.grafana.tls.certresolver=mycert"
+
+  # traefik:
+  #   image: traefik:2.11.3
+  #   restart: unless-stopped
+  #   command:
+  #     - "--providers.docker=true"
+  #     - "--providers.docker.exposedbydefault=false"
+  #     - "--entryPoints.websecure.address=:443"
+  #     - "--certificatesresolvers.mycert.acme.email=myaddress@domain.com"
+  #     - "--certificatesresolvers.mycert.acme.storage=/acme.json"
+  #     - "--certificatesresolvers.mycert.acme.tlschallenge=true"
+  #   ports:
+  #     - 443:443
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     - ./traefik/acme.json:/acme.json
+  #   networks:
+  #     - proxy
+
+networks:
+  proxy:
+    # external: true
+  grafana-network:
+
+volumes:
+  prometheus-data:
+
+  grafana-data:
