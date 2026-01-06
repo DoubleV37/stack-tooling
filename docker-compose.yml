@@ -29,11 +29,11 @@ services:
       - grafana-network
 
   smartctl-exporter:
-    image: prometheuscommunity/smartctl-exporter:latest
+    image: prometheuscommunity/smartctl-exporter:v0.14.0
     privileged: true
     user: root
     devices:
-      - "/dev:/dev"
+      - "/dev:/dev:ro"
     restart: unless-stopped
     networks:
       - grafana-network
