@@ -58,7 +58,6 @@ services:
 
   filebrowser:
     image: filebrowser/filebrowser:v2.53.1
-    user: 1000:1000
     restart: unless-stopped
     ports:
       - 8080:80 # Accessible via http://ip-du-serveur:8080
