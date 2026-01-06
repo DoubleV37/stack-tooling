@@ -13,3 +13,6 @@ scrape_configs:
   - job_name: 'cadvisor'
     static_configs:
       - targets: ['cadvisor:8080']
+  - job_name: 'smartctl'
+    static_configs:
+      - targets: ['smartctl-exporter:9633']

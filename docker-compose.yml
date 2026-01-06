@@ -28,6 +28,16 @@ services:
     networks:
       - grafana-network
 
+  smartctl-exporter:
+    image: prometheuscommunity/smartctl-exporter:latest
+    privileged: true
+    user: root
+    devices:
+      - "/dev:/dev"
+    restart: unless-stopped
+    networks:
+      - grafana-networks
+
   prometheus:
     image: prom/prometheus:v2.52.0
     restart: unless-stopped
