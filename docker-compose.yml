@@ -63,8 +63,8 @@ services:
       - 8080:80 # Accessible via http://ip-du-serveur:8080
     volumes:
       - /media:/srv
-      - db_filebrowser:/database
-      - ./settings-filebrowser.json:/config/settings.json
+      - filebrowser-db:/database
+      - filebrowser-config:/config
 
   # traefik:
   #   image: traefik:2.11.3
@@ -94,4 +94,6 @@ volumes:
 
   grafana-data:
 
-  db_filebrowser:
+  filebrowser-db:
+
+  filebrowser-config:
