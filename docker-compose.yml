@@ -64,7 +64,7 @@ services:
       - 8080:80 # Accessible via http://ip-du-serveur:8080
     volumes:
       - /media:/srv
-      - db_filebrowser:/database/filebrowser.db
+      - db_filebrowser:/database
       - ./settings-filebrowser.json:/config/settings.json
 
   # traefik:
