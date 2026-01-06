@@ -56,6 +56,17 @@ services:
     #   - "traefik.http.routers.grafana.entrypoints=websecure"
     #   - "traefik.http.routers.grafana.tls.certresolver=mycert"
 
+  filebrowser:
+    image: filebrowser/filebrowser:v2.53.1
+    user: 1000:1000
+    restart: unless-stopped
+    ports:
+      - 8080:80 # Accessible via http://ip-du-serveur:8080
+    volumes:
+      - /media:/srv
+      - db_filebrowser:/database/filebrowser.db
+      - ./settings-filebrowser.json:/config/settings.json
+
   # traefik:
   #   image: traefik:2.11.3
   #   restart: unless-stopped
@@ -83,3 +94,5 @@ volumes:
   prometheus-data:
 
   grafana-data:
+
+  db_filebrowser:
