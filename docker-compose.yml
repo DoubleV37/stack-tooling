@@ -36,7 +36,7 @@ services:
       - "/dev:/dev"
     restart: unless-stopped
     networks:
-      - grafana-networks
+      - grafana-network
 
   prometheus:
     image: prom/prometheus:v2.52.0
